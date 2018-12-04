@@ -1,5 +1,7 @@
 package net.dallascricket.paidUmpiring;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,8 +12,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.dallascricket.paidUmpiring.Request.ReservationReq;
+import net.dallascricket.paidUmpiring.Request.UmpireAssignReq;
 import net.dallascricket.paidUmpiring.Request.UmpireReq;
 import net.dallascricket.paidUmpiring.domain.Greeting;
+import net.dallascricket.paidUmpiring.exception.ReservationNotFoundException;
+import net.dallascricket.paidUmpiring.exception.UmpireNotFoundException;
 import net.dallascricket.paidUmpiring.jpa.model.Reservation;
 import net.dallascricket.paidUmpiring.jpa.model.Reservation.ReservationBuilder;
 import net.dallascricket.paidUmpiring.jpa.model.Umpire;
@@ -37,17 +42,20 @@ public class MainController {
 
     @PostMapping("/umpire") 
     public void createNewUmpire(@RequestBody UmpireReq newUmpireRequest){
-    	
     	umpireRepository.save(new Umpire(newUmpireRequest.getName(), newUmpireRequest.isCertified()));
-    	
     }
     
     @PostMapping("/reservation") 
     public void createNewReservation(@RequestBody ReservationReq reservationReq){
-    	
     	Reservation reservation = new ReservationBuilder(reservationReq).build();
-    	
     	reservationRepository.save(reservation);
-    	
+    }
+    
+    @PostMapping("/assignUmpire") 
+    public void assignUmpire(@RequestBody UmpireAssignReq umpireAssignReq){
+    	Umpire umpire = umpireRepository.findById(umpireAssignReq.getUmpireId()).orElseThrow(() ->new UmpireNotFoundException());
+    	Reservation reservation = reservationRepository.findById(umpireAssignReq.getReservationId()).orElseThrow(() -> new ReservationNotFoundException());
+    	reservation.setUmpire(umpire);
+    	reservationRepository.save(reservation);
     }
 }

@@ -1,6 +1,6 @@
 package net.dallascricket.paidUmpiring.jpa.model;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,14 +10,15 @@ import javax.persistence.Id;
 @Entity
 public class Game {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	private String team1;
 	private String team2;
 	private String venue;
-	private Calendar date;
+	private LocalDateTime date;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+
 	public Integer getId() {
 		return id;
 	}
@@ -42,12 +43,14 @@ public class Game {
 	public void setVenue(String venue) {
 		this.venue = venue;
 	}
-	public Calendar getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
-	public void setDate(Calendar date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
+
+
 	
 	
 }

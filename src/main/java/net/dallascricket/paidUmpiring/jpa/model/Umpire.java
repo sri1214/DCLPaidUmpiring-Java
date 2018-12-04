@@ -8,19 +8,23 @@ import javax.persistence.Id;
 @Entity
 public class Umpire {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	private String name;
 	private boolean certified;
+		
 	
-	
-	
+	public Umpire() {
+		super();
+	}
+
 	public Umpire(String name, boolean certified) {
 		super();
 		this.name = name;
 		this.certified = certified;
 	}
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+
 	public Integer getId() {
 		return id;
 	}
@@ -39,7 +43,6 @@ public class Umpire {
 	public void setCertified(boolean certified) {
 		this.certified = certified;
 	}
-	
-	
+
 
 }
